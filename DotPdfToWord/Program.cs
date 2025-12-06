@@ -1,4 +1,7 @@
-﻿using Spire.Pdf;
+﻿using UglyToad.PdfPig;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 // Check command-line arguments
 if (args.Length < 1)
@@ -51,13 +54,41 @@ try
 
     Console.WriteLine($"Converting '{inputPath}' to '{outputPath}'...");
 
-    // Load the PDF document
-    var pdfDocument = new PdfDocument();
-    pdfDocument.LoadFromFile(inputPath);
-    
-    // Save as Word document
-    pdfDocument.SaveToFile(outputPath, Spire.Pdf.FileFormat.DOCX);
-    pdfDocument.Close();
+    // Extract text from PDF using PdfPig
+    using (var pdfDocument = PdfDocument.Open(inputPath))
+    {
+        // Create a new Word document using OpenXml
+        using (var wordDocument = WordprocessingDocument.Create(outputPath, WordprocessingDocumentType.Document))
+        {
+            // Add main document part
+            var mainPart = wordDocument.AddMainDocumentPart();
+            mainPart.Document = new Document();
+            var body = mainPart.Document.AppendChild(new Body());
+
+            // Process each page of the PDF
+            foreach (var page in pdfDocument.GetPages())
+            {
+                // Extract text from the page
+                var pageText = page.Text;
+
+                // Add a paragraph for this page
+                var paragraph = body.AppendChild(new Paragraph());
+                var run = paragraph.AppendChild(new Run());
+                run.AppendChild(new Text(pageText) { Space = SpaceProcessingModeValues.Preserve });
+
+                // Add a page break after each page (except the last one)
+                if (page.Number < pdfDocument.NumberOfPages)
+                {
+                    var breakParagraph = body.AppendChild(new Paragraph());
+                    var breakRun = breakParagraph.AppendChild(new Run());
+                    breakRun.AppendChild(new Break() { Type = BreakValues.Page });
+                }
+            }
+
+            // Save the document
+            mainPart.Document.Save();
+        }
+    }
 
     Console.WriteLine("Conversion completed successfully!");
     Console.WriteLine($"Output saved to: {outputPath}");
