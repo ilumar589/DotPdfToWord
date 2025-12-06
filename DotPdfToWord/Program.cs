@@ -74,7 +74,7 @@ try
                 // Add a paragraph for this page
                 var paragraph = body.AppendChild(new Paragraph());
                 var run = paragraph.AppendChild(new Run());
-                run.AppendChild(new Text(pageText));
+                run.AppendChild(new Text(pageText) { Space = SpaceProcessingModeValues.Preserve });
 
                 // Add a page break after each page (except the last one)
                 if (page.Number < pdfDocument.NumberOfPages)
