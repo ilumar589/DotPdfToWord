@@ -6,7 +6,7 @@ A simple .NET 10 console application that converts PDF documents to Word (DOCX) 
 
 - Convert PDF files to Word (DOCX) format
 - Simple command-line interface
-- Preserves text formatting and layout
+- Preserves basic text structure (paragraphs per page)
 - Supports both absolute and relative file paths
 - Built with .NET 10
 
@@ -20,7 +20,7 @@ A simple .NET 10 console application that converts PDF documents to Word (DOCX) 
 
 ```bash
 git clone https://github.com/ilumar589/DotPdfToWord.git
-cd DotPdfToWord/DotPdfToWord
+cd DotPdfToWord
 dotnet build -c Release
 ```
 
@@ -40,33 +40,39 @@ DotPdfToWord <input.pdf> [output.docx]
 
 Convert a PDF to Word with automatic naming:
 ```bash
-dotnet run document.pdf
+dotnet run --project DotPdfToWord document.pdf
 # Creates document.docx
 ```
 
 Convert a PDF to Word with custom output name:
 ```bash
-dotnet run document.pdf my-document.docx
+dotnet run --project DotPdfToWord document.pdf my-document.docx
 # Creates my-document.docx
 ```
 
 Run the built executable:
 ```bash
-./bin/Release/net10.0/DotPdfToWord document.pdf output.docx
+./DotPdfToWord/bin/Release/net10.0/DotPdfToWord document.pdf output.docx
 ```
 
 ## Technology Stack
 
 - **Framework**: .NET 10
 - **Libraries**: 
-  - FreeSpire.PDF - PDF processing
-  - FreeSpire.Doc - Word document generation
+  - PdfPig (UglyToad.PdfPig) - PDF text extraction
+  - DocumentFormat.OpenXml - Word document generation (Microsoft's official SDK)
+
+## Visual Studio
+
+This solution can be opened directly in Visual Studio 2022:
+1. Open `DotPdfToWord.sln` in Visual Studio
+2. Build and run the project
 
 ## Notes
 
-- FreeSpire libraries have limitations in their free versions (e.g., page limits)
-- For production use with large documents, consider purchasing a commercial license or using alternative libraries
-- The conversion quality depends on the complexity of the PDF document
+- The conversion extracts text content from PDFs and preserves basic structure
+- Complex formatting, images, and layouts may not be preserved
+- Each PDF page is converted to a paragraph in the Word document with page breaks
 
 ## License
 
