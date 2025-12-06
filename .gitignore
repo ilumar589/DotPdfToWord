@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.rsuser
 
 # Build results
 [Dd]ebug/
@@ -42,13 +43,6 @@ artifacts/
 .idea/
 *.sln.iml
 
-# User-specific files
-*.rsuser
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
 # Mono auto generated files
 mono_crash.*
 
@@ -61,9 +55,6 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
-
-# VS Code directories
-.vscode/
 
 # Mac
 .DS_Store

@@ -43,7 +43,7 @@ try
     }
 
     // Validate input file is a PDF
-    if (!inputPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+    if (!Path.GetExtension(inputPath).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
     {
         Console.Error.WriteLine($"Error: Input file must be a PDF file.");
         return 1;
